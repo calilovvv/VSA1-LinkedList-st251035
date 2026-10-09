@@ -1,0 +1,133 @@
+using System;
+using System.Collections.Generic;
+namespace LinkedListLab
+{
+    public class Node
+    {
+        public int Data;
+        public Node Next;
+        public Node(int data)
+        {
+            Data = data;
+            Next = null;
+        }
+    }
+    public class LinkedList
+    {
+        private Node head;
+        public void InsertAtBeginning(int data)
+        {
+            Node newNode = new Node(data);
+            newNode.Next = head;
+            head = newNode;
+            Console.WriteLine($"Əlavə olundu (başlanğıc): {data}");
+        }
+        public void InsertAtEnd(int data)
+        {
+            Node newNode = new Node(data);
+            if (head == null)
+            {
+                head = newNode;
+                Console.WriteLine($"Əlavə olundu (son, ilk element): {data}");
+                return;
+            }
+            Node current = head;
+            while (current.Next != null)
+            {
+                current = current.Next;
+            }
+            current.Next = newNode;
+            Console.WriteLine($"Əlavə olundu (son): {data}");
+        }
+        public void DeleteNode(int key)
+        {
+            Node current = head;
+            if (current != null && current.Data == key)
+            {
+                head = current.Next;
+                Console.WriteLine($"Silindi: {key}");
+                return;
+            }
+            Node prev = null;
+            while (current != null && current.Data != key)
+            {
+                prev = current;
+                current = current.Next;
+            }
+            if (current == null)
+            {
+                Console.WriteLine($"Element tapılmadı: {key}");
+                return;
+            }
+            prev.Next = current.Next;
+            Console.WriteLine($"Silindi: {key}");
+        }
+        public bool SearchNode(int key)
+        {
+            Node current = head;
+            int position = 1;
+            while (current != null)
+            {
+                if (current.Data == key)
+                {
+                    Console.WriteLine($"Element tapıldı: {key} (Mövqe: {position})");
+                    return true;
+                }
+                current = current.Next;
+                position++;
+            }
+            Console.WriteLine($"Element tapılmadı: {key}");
+            return false;
+        }
+        public void ReverseList()
+        {
+            Node prev = null;
+            Node current = head;
+            while (current != null)
+            {
+                Node nextNode = current.Next;
+                current.Next = prev;
+                prev = current;
+                current = nextNode;
+            }
+            head = prev;
+            Console.WriteLine("Siyahı tərsinə çevrildi.");
+        }
+        public void Display()
+        {
+            Node current = head;
+            List<string> elements = new List<string>();
+            while (current != null)
+            {
+                elements.Add(current.Data.ToString());
+                current = current.Next;
+            }
+            Console.WriteLine(elements.Count > 0 ? string.Join(" -> ", elements) : "Siyahı boşdur");
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            LinkedList ll = new LinkedList();
+
+            Console.WriteLine("--- Elementlərin əlavə edilməsi ---");
+            ll.InsertAtEnd(10);
+            ll.InsertAtEnd(20);
+            ll.InsertAtBeginning(5);
+            ll.Display();
+
+            Console.WriteLine("\n--- Axtarış əməliyyatı ---");
+            ll.SearchNode(20);
+
+            Console.WriteLine("\n--- Silmə əməliyyatı ---");
+            ll.DeleteNode(10);
+            ll.Display();
+
+            Console.WriteLine("\n--- Tərsinə çevirmə əməliyyatı ---");
+            ll.ReverseList();
+            ll.Display();
+        }
+    }
+}
